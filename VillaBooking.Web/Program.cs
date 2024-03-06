@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using VillaBooking.Infrastructure.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add Db Context
+builder.Services.AddDbContext<AppDbContext>(
+    option => option.UseSqlite(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
