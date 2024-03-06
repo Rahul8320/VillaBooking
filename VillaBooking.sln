@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VillaBooking.Web", "VillaBooking.Web\VillaBooking.Web.csproj", "{02708EE8-BE49-42C3-AD5E-68E326276272}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VillaBooking.Domain", "VillaBooking.Domain\VillaBooking.Domain.csproj", "{06FD98E9-AED0-4353-8D71-9DA2AD540CED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VillaBooking.Application", "VillaBooking.Application\VillaBooking.Application.csproj", "{EA2051D5-D57B-470C-A759-2FD9DEECD98E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VillaBooking.Infrastructure", "VillaBooking.Infrastructure\VillaBooking.Infrastructure.csproj", "{44216406-F035-4804-BFDF-FE10171069C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +18,17 @@ Global
 		{02708EE8-BE49-42C3-AD5E-68E326276272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02708EE8-BE49-42C3-AD5E-68E326276272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02708EE8-BE49-42C3-AD5E-68E326276272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06FD98E9-AED0-4353-8D71-9DA2AD540CED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06FD98E9-AED0-4353-8D71-9DA2AD540CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06FD98E9-AED0-4353-8D71-9DA2AD540CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06FD98E9-AED0-4353-8D71-9DA2AD540CED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2051D5-D57B-470C-A759-2FD9DEECD98E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2051D5-D57B-470C-A759-2FD9DEECD98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2051D5-D57B-470C-A759-2FD9DEECD98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2051D5-D57B-470C-A759-2FD9DEECD98E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44216406-F035-4804-BFDF-FE10171069C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44216406-F035-4804-BFDF-FE10171069C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44216406-F035-4804-BFDF-FE10171069C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44216406-F035-4804-BFDF-FE10171069C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
