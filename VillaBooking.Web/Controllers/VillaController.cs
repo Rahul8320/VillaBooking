@@ -39,14 +39,42 @@ public class VillaController(AppDbContext context) : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Villa model)
     {
-        if (ModelState.IsValid)
+        if (model.Name == model.Description)
         {
-            _context.Villas.Add(model);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Villa");
+            ModelState.AddModelError("Description", "The description cannot exactly match the Name.");
         }
 
-        return View();
+        if (!ModelState.IsValid) return View();
+
+        _context.Villas.Add(model);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Villa");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Update(int? villaId)
+    {
+        var villa = await _context.Villas.FindAsync(villaId);
+
+        if (villa == null)
+        {
+            return NotFound();
+        }
+
+        return View(villa);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int? villaId)
+    {
+        var villa = await _context.Villas.FindAsync(villaId);
+
+        if (villa == null)
+        {
+            return NotFound();
+        }
+
+        return View(villa);
     }
 }
