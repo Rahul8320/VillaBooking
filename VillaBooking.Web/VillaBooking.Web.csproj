@@ -18,4 +18,8 @@
       <ProjectReference Include="..\VillaBooking.Infrastructure\VillaBooking.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Villa\Index.cshtml" />
+    </ItemGroup>
+
 </Project>
