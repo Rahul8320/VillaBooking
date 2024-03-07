@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews();
 // Add Db Context
 builder.Services.AddDbContext<AppDbContext>(
     option => option.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("VillaBooking.Web")));
 
 var app = builder.Build();
 
