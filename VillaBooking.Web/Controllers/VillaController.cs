@@ -59,10 +59,26 @@ public class VillaController(AppDbContext context) : Controller
 
         if (villa == null)
         {
-            return NotFound();
+            return RedirectToAction("Error", "Home");
         }
 
         return View(villa);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(Villa model)
+    {
+        if (model.Name == model.Description)
+        {
+            ModelState.AddModelError("Description", "The description cannot exactly match the Name.");
+        }
+
+        if (!ModelState.IsValid) return View();
+
+        _context.Villas.Update(model);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Villa");
     }
 
     [HttpGet]
@@ -72,7 +88,7 @@ public class VillaController(AppDbContext context) : Controller
 
         if (villa == null)
         {
-            return NotFound();
+            return RedirectToAction("Error", "Home");
         }
 
         return View(villa);
