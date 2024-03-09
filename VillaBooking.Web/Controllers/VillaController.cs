@@ -57,7 +57,7 @@ public class VillaController(AppDbContext context) : Controller
     {
         var villa = await _context.Villas.FindAsync(villaId);
 
-        if (villa == null)
+        if (villa is null)
         {
             return RedirectToAction("Error", "Home");
         }
@@ -86,11 +86,27 @@ public class VillaController(AppDbContext context) : Controller
     {
         var villa = await _context.Villas.FindAsync(villaId);
 
-        if (villa == null)
+        if (villa is null)
         {
             return RedirectToAction("Error", "Home");
         }
 
         return View(villa);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(Villa model)
+    {
+        var villa = await _context.Villas.FindAsync(model.Id);
+
+        if (villa is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        _context.Villas.Remove(villa);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Index", "Villa");
     }
 }
