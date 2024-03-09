@@ -8,12 +8,14 @@ namespace VillaBooking.Web.Controllers;
 /// Represents the villa controller for views.
 /// </summary>
 /// <param name="context">The database context.</param>
-public class VillaController(AppDbContext context) : Controller
+public class VillaController(AppDbContext context, ILogger<VillaController> logger) : Controller
 {
     /// <summary>
     /// Represents the application database context.
     /// </summary>
     private readonly AppDbContext _context = context;
+
+    private readonly ILogger<VillaController> _logger = logger;
 
     /// <summary>
     /// View list of all villa.
@@ -41,6 +43,7 @@ public class VillaController(AppDbContext context) : Controller
     {
         if (model.Name == model.Description)
         {
+            _logger.LogError("The description cannot exactly match the Name.");
             ModelState.AddModelError("Description", "The description cannot exactly match the Name.");
         }
 
@@ -50,6 +53,7 @@ public class VillaController(AppDbContext context) : Controller
         model.UpdatedDateTime = DateTime.UtcNow;
         _context.Villas.Add(model);
         await _context.SaveChangesAsync();
+        _logger.LogInformation("Villa with id: {model.Id} is created successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is created successfully.";
         return RedirectToAction("Index", "Villa");
     }
@@ -59,13 +63,10 @@ public class VillaController(AppDbContext context) : Controller
     {
         var villa = await _context.Villas.FindAsync(villaId);
 
-        if (villa is null)
-        {
-            TempData["error"] = $"Villa with id: {villaId} is not found!";
-            return RedirectToAction("Error", "Home");
-        }
+        if (villa is not null) return View(villa);
 
-        return View(villa);
+        TempData["error"] = $"Villa with id: {villaId} is not found!";
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpPost]
@@ -81,6 +82,7 @@ public class VillaController(AppDbContext context) : Controller
         model.UpdatedDateTime = DateTime.UtcNow;
         _context.Villas.Update(model);
         await _context.SaveChangesAsync();
+        _logger.LogInformation("Villa with id: {model.Id} is updated successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is updated successfully.";
         return RedirectToAction("Index", "Villa");
     }
@@ -90,13 +92,10 @@ public class VillaController(AppDbContext context) : Controller
     {
         var villa = await _context.Villas.FindAsync(villaId);
 
-        if (villa is null)
-        {
-            TempData["error"] = $"Villa with id: {villaId} is not found!";
-            return RedirectToAction("Error", "Home");
-        }
+        if (villa is not null) return View(villa);
 
-        return View(villa);
+        TempData["error"] = $"Villa with id: {villaId} is not found!";
+        return RedirectToAction("Error", "Home");
     }
 
     [HttpPost]
@@ -112,6 +111,7 @@ public class VillaController(AppDbContext context) : Controller
 
         _context.Villas.Remove(villa);
         await _context.SaveChangesAsync();
+        _logger.LogInformation("Villa with id: {model.Id} is deleted successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is deleted successfully.";
         return RedirectToAction("Index", "Villa");
     }

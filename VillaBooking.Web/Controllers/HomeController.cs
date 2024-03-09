@@ -20,6 +20,7 @@ public class HomeController(ILogger<HomeController> logger) : Controller
 
     public IActionResult Error()
     {
+        _logger.LogError("Something happened wrong!");
         return View();
     }
 }
