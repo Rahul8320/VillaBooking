@@ -12,6 +12,8 @@ public class VillaNumber
     public required int VillaId { get; set; }
 
     public Villa? Villa { get; set; }
-
     public string? SpecialDetails { get; set;}
+
+    public DateTime CreatedDateTime { get; set; }
+    public DateTime UpdatedDateTime { get; set; }
 }

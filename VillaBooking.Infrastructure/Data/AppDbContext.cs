@@ -54,46 +54,64 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             {
                 Villa_Number = 101,
                 VillaId = 1,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 102,
                 VillaId = 1,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 103,
                 VillaId = 1,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 201,
                 VillaId = 2,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 202,
                 VillaId = 2,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 203,
                 VillaId = 2,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 301,
                 VillaId = 3,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 302,
                 VillaId = 3,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             },
             new VillaNumber()
             {
                 Villa_Number = 303,
                 VillaId = 3,
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             }
         );
     }
