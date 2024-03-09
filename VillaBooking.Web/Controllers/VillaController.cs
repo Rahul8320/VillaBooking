@@ -48,7 +48,7 @@ public class VillaController(AppDbContext context) : Controller
 
         _context.Villas.Add(model);
         await _context.SaveChangesAsync();
-
+        TempData["success"] = $"Villa with id: {model.Id} is created successfully.";
         return RedirectToAction("Index", "Villa");
     }
 
@@ -59,6 +59,7 @@ public class VillaController(AppDbContext context) : Controller
 
         if (villa is null)
         {
+            TempData["error"] = $"Villa with id: {villaId} is not found!";
             return RedirectToAction("Error", "Home");
         }
 
@@ -77,7 +78,7 @@ public class VillaController(AppDbContext context) : Controller
 
         _context.Villas.Update(model);
         await _context.SaveChangesAsync();
-
+        TempData["success"] = $"Villa with id: {model.Id} is updated successfully.";
         return RedirectToAction("Index", "Villa");
     }
 
@@ -88,6 +89,7 @@ public class VillaController(AppDbContext context) : Controller
 
         if (villa is null)
         {
+            TempData["error"] = $"Villa with id: {villaId} is not found!";
             return RedirectToAction("Error", "Home");
         }
 
@@ -101,12 +103,13 @@ public class VillaController(AppDbContext context) : Controller
 
         if (villa is null)
         {
+            TempData["error"] = $"Villa with id: {model.Id} is not found!";
             return RedirectToAction("Error", "Home");
         }
 
         _context.Villas.Remove(villa);
         await _context.SaveChangesAsync();
-
+        TempData["success"] = $"Villa with id: {model.Id} is deleted successfully.";
         return RedirectToAction("Index", "Villa");
     }
 }
