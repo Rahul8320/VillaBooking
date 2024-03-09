@@ -46,6 +46,8 @@ public class VillaController(AppDbContext context) : Controller
 
         if (!ModelState.IsValid) return View();
 
+        model.CreatedDateTime = DateTime.UtcNow;
+        model.UpdatedDateTime = DateTime.UtcNow;
         _context.Villas.Add(model);
         await _context.SaveChangesAsync();
         TempData["success"] = $"Villa with id: {model.Id} is created successfully.";
@@ -76,6 +78,7 @@ public class VillaController(AppDbContext context) : Controller
 
         if (!ModelState.IsValid) return View();
 
+        model.UpdatedDateTime = DateTime.UtcNow;
         _context.Villas.Update(model);
         await _context.SaveChangesAsync();
         TempData["success"] = $"Villa with id: {model.Id} is updated successfully.";
