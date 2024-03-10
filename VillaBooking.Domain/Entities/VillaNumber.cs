@@ -6,6 +6,7 @@ namespace VillaBooking.Domain.Entities;
 public class VillaNumber
 {
     [Key, DatabaseGenerated((DatabaseGeneratedOption.None))]
+    [Display(Name = "Villa Number")]
     public required int Villa_Number { get; set; }
 
     [ForeignKey("Villa")]
