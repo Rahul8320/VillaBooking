@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VillaBooking.Domain.Entities;
 using VillaBooking.Infrastructure.Data;
+using VillaBooking.Web.Models.ViewModels;
 
 namespace VillaBooking.Web.Controllers;
 
@@ -29,28 +30,31 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     [HttpGet]
     public IActionResult Create()
     {
-        var listItems = _context.Villas.ToList().Select(u => new SelectListItem()
+        var villaNumberVm = new VillaNumberVM()
         {
-            Text = u.Name,
-            Value = u.Id.ToString(),
-        });
+            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            {
+                Text = u.Name,
+                Value = u.Id.ToString(),
+            }),
+        };
 
-        ViewData["VillaList"] = listItems;
-
-        return View();
+        return View(villaNumberVm);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(VillaNumber model)
+    public async Task<IActionResult> Create(VillaNumberVM model)
     {
         if (!ModelState.IsValid) return View();
 
-        model.CreatedDateTime = DateTime.UtcNow;
-        model.UpdatedDateTime = DateTime.UtcNow;
+        model.VillaNumber.CreatedDateTime = DateTime.UtcNow;
+        model.VillaNumber.UpdatedDateTime = DateTime.UtcNow;
 
-        _context.VillaNumbers.Add(model);
+        _context.VillaNumbers.Add(model.VillaNumber);
         await _context.SaveChangesAsync();
-        TempData["success"] = $"Villa Number: {model.Villa_Number} created successfully.";
+
+        TempData["success"] = $"Villa Number: {model.VillaNumber.Villa_Number} created successfully.";
+        _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} created successfully.");
         return RedirectToAction("Index", "VillaNumber");
     }
 }
