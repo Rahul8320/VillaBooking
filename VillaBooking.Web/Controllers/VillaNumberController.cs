@@ -47,6 +47,14 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     {
         if (!ModelState.IsValid) return View();
 
+        var existingVillaNumber = await _context.VillaNumbers.FindAsync(model.VillaNumber.Villa_Number);
+
+        if (existingVillaNumber is not null)
+        {
+            TempData["error"] = $"Villa Number: {model.VillaNumber.Villa_Number} already exists.";
+            return View();
+        }
+
         model.VillaNumber.CreatedDateTime = DateTime.UtcNow;
         model.VillaNumber.UpdatedDateTime = DateTime.UtcNow;
 
