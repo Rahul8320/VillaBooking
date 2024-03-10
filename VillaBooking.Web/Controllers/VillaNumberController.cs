@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VillaBooking.Domain.Entities;
 using VillaBooking.Infrastructure.Data;
@@ -28,6 +29,14 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     [HttpGet]
     public IActionResult Create()
     {
+        var listItems = _context.Villas.ToList().Select(u => new SelectListItem()
+        {
+            Text = u.Name,
+            Value = u.Id.ToString(),
+        });
+
+        ViewData["VillaList"] = listItems;
+
         return View();
     }
 

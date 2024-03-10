@@ -13,6 +13,7 @@ public class VillaNumber
     public required int VillaId { get; set; }
 
     public Villa? Villa { get; set; }
+    [Display(Name = "Special Details")]
     public string? SpecialDetails { get; set;}
 
     public DateTime CreatedDateTime { get; set; }
