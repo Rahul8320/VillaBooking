@@ -52,7 +52,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         if (existingVillaNumber is not null)
         {
             TempData["error"] = $"Villa Number: {model.VillaNumber.Villa_Number} already exists.";
-            return RedirectToAction("Create", "VillaNumber");
+            return RedirectToAction(nameof(Create));
         }
 
         model.VillaNumber.CreatedDateTime = DateTime.UtcNow;
@@ -93,8 +93,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         if (!ModelState.IsValid)
         {
             return RedirectToAction(
-                "Update",
-                "VillaNumber",
+                nameof(Update),
                 new {villaNumberId = model.VillaNumber.Villa_Number});
         }
 
@@ -106,7 +105,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
 
         TempData["success"] = $"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.";
         _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.");
-        return RedirectToAction("Index", "VillaNumber");
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -145,6 +144,6 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
 
         TempData["success"] = $"Villa Number: {villaNumber.Villa_Number} deleted successfully.";
         _logger.LogInformation($"Villa Number: {villaNumber.Villa_Number} deleted successfully.");
-        return RedirectToAction("Index", "VillaNumber");
+        return RedirectToAction(nameof(Index));
     }
 }

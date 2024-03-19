@@ -55,7 +55,7 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
         await _context.SaveChangesAsync();
         _logger.LogInformation("Villa with id: {model.Id} is created successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is created successfully.";
-        return RedirectToAction("Index", "Villa");
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -84,7 +84,7 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
         await _context.SaveChangesAsync();
         _logger.LogInformation("Villa with id: {model.Id} is updated successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is updated successfully.";
-        return RedirectToAction("Index", "Villa");
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -113,6 +113,6 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
         await _context.SaveChangesAsync();
         _logger.LogInformation("Villa with id: {model.Id} is deleted successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is deleted successfully.";
-        return RedirectToAction("Index", "Villa");
+        return RedirectToAction(nameof(Index));
     }
 }
