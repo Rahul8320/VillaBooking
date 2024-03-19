@@ -1,19 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using VillaBooking.Application.IRepositories;
 using VillaBooking.Domain.Entities;
-using VillaBooking.Infrastructure.Data;
 
 namespace VillaBooking.Web.Controllers;
 
 /// <summary>
 /// Represents the villa controller for views.
 /// </summary>
-/// <param name="context">The database context.</param>
-public class VillaController(AppDbContext context, ILogger<VillaController> logger) : Controller
+public class VillaController(IVillaRepository villaRepository, ILogger<VillaController> logger) : Controller
 {
     /// <summary>
-    /// Represents the application database context.
+    /// Represents the villa repository interface.
     /// </summary>
-    private readonly AppDbContext _context = context;
+    private readonly IVillaRepository _villaRepository = villaRepository;
 
     private readonly ILogger<VillaController> _logger = logger;
 
@@ -24,7 +23,7 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
     [HttpGet]
     public IActionResult Index()
     {
-        var villas = _context.Villas.ToList();
+        var villas = _villaRepository.GetAll();
         return View(villas);
     }
 
@@ -51,17 +50,17 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
 
         model.CreatedDateTime = DateTime.UtcNow;
         model.UpdatedDateTime = DateTime.UtcNow;
-        _context.Villas.Add(model);
-        await _context.SaveChangesAsync();
+        _villaRepository.Add(model);
+        await _villaRepository.Save();
         _logger.LogInformation("Villa with id: {model.Id} is created successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is created successfully.";
         return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
-    public async Task<IActionResult> Update(int? villaId)
+    public IActionResult Update(int? villaId)
     {
-        var villa = await _context.Villas.FindAsync(villaId);
+        var villa = _villaRepository.Get(u => u.Id == villaId);
 
         if (villa is not null) return View(villa);
 
@@ -80,17 +79,17 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
         if (!ModelState.IsValid) return View();
 
         model.UpdatedDateTime = DateTime.UtcNow;
-        _context.Villas.Update(model);
-        await _context.SaveChangesAsync();
+        _villaRepository.Update(model);
+        await _villaRepository.Save();
         _logger.LogInformation("Villa with id: {model.Id} is updated successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is updated successfully.";
         return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
-    public async Task<IActionResult> Delete(int? villaId)
+    public IActionResult Delete(int? villaId)
     {
-        var villa = await _context.Villas.FindAsync(villaId);
+        var villa = _villaRepository.Get(u => u.Id == villaId);
 
         if (villa is not null) return View(villa);
 
@@ -101,7 +100,7 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
     [HttpPost]
     public async Task<IActionResult> Delete(Villa model)
     {
-        var villa = await _context.Villas.FindAsync(model.Id);
+        var villa = _villaRepository.Get(u => u.Id == model.Id);
 
         if (villa is null)
         {
@@ -109,8 +108,8 @@ public class VillaController(AppDbContext context, ILogger<VillaController> logg
             return RedirectToAction("Error", "Home");
         }
 
-        _context.Villas.Remove(villa);
-        await _context.SaveChangesAsync();
+        _villaRepository.Remove(villa);
+        await _villaRepository.Save();
         _logger.LogInformation("Villa with id: {model.Id} is deleted successfully.", model.Id);
         TempData["success"] = $"Villa with id: {model.Id} is deleted successfully.";
         return RedirectToAction(nameof(Index));
