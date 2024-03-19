@@ -6,8 +6,8 @@ namespace VillaBooking.Web.Models.ViewModels;
 
 public class VillaNumberVM
 {
-    public VillaNumber VillaNumber { get; set; } = default!;
+    public VillaNumber? VillaNumber { get; set; }
 
     [ValidateNever]
-    public IEnumerable<SelectListItem> VillaList { get; set; } = default!;
+    public IEnumerable<SelectListItem>? VillaList { get; set; }
 }

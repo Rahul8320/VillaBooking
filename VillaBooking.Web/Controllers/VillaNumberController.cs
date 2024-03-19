@@ -65,4 +65,47 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} created successfully.");
         return RedirectToAction("Index", "VillaNumber");
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Update(int villaNumberId)
+    {
+        var villaNumberVm = new VillaNumberVM()
+        {
+            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            {
+                Text = u.Name,
+                Value = u.Id.ToString(),
+            }),
+            VillaNumber = await _context.VillaNumbers.FindAsync(villaNumberId),
+        };
+
+        if (villaNumberVm.VillaNumber == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        return View(villaNumberVm);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(VillaNumberVM model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction(
+                "Update",
+                "VillaNumber",
+                new {villaNumberId = model.VillaNumber.Villa_Number});
+        }
+
+        model.VillaNumber!.CreatedDateTime = model.VillaNumber.CreatedDateTime;
+        model.VillaNumber.UpdatedDateTime = DateTime.UtcNow;
+
+        _context.VillaNumbers.Update(model.VillaNumber);
+        await _context.SaveChangesAsync();
+
+        TempData["success"] = $"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.";
+        _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.");
+        return RedirectToAction("Index", "VillaNumber");
+    }
 }
