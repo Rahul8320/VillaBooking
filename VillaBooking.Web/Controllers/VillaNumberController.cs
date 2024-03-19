@@ -108,4 +108,43 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.");
         return RedirectToAction("Index", "VillaNumber");
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int villaNumberId)
+    {
+        var villaNumberVm = new VillaNumberVM()
+        {
+            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            {
+                Text = u.Name,
+                Value = u.Id.ToString(),
+            }),
+            VillaNumber = await _context.VillaNumbers.FindAsync(villaNumberId),
+        };
+
+        if (villaNumberVm.VillaNumber is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        return View(villaNumberVm);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(VillaNumberVM model)
+    {
+        var villaNumber = await _context.VillaNumbers.FindAsync(model.VillaNumber?.Villa_Number);
+
+        if (villaNumber is null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        _context.VillaNumbers.Remove(villaNumber);
+        await _context.SaveChangesAsync();
+
+        TempData["success"] = $"Villa Number: {villaNumber.Villa_Number} deleted successfully.";
+        _logger.LogInformation($"Villa Number: {villaNumber.Villa_Number} deleted successfully.");
+        return RedirectToAction("Index", "VillaNumber");
+    }
 }
