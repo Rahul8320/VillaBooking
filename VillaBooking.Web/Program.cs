@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using VillaBooking.Application.IRepositories;
 using VillaBooking.Infrastructure.Data;
+using VillaBooking.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(
     option => option.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("VillaBooking.Web")));
+
+// Add repositories
+builder.Services.AddScoped<IVillaRepository,VillaRepository>();
 
 var app = builder.Build();
 
