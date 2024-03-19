@@ -52,7 +52,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         if (existingVillaNumber is not null)
         {
             TempData["error"] = $"Villa Number: {model.VillaNumber.Villa_Number} already exists.";
-            return View();
+            return RedirectToAction("Create", "VillaNumber");
         }
 
         model.VillaNumber.CreatedDateTime = DateTime.UtcNow;
