@@ -15,7 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(
         b => b.MigrationsAssembly("VillaBooking.Web")));
 
 // Add repositories
-builder.Services.AddScoped<IVillaRepository,VillaRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

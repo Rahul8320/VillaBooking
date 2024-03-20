@@ -7,34 +7,18 @@ using VillaBooking.Infrastructure.Data;
 
 namespace VillaBooking.Infrastructure.Repositories;
 
-public class VillaRepository(AppDbContext context, ILogger<VillaRepository> logger)
+public class VillaRepository(AppDbContext context)
     : Repository<Villa>(context), IVillaRepository
 {
     private readonly AppDbContext _context = context;
 
     public void Update(Villa entity)
     {
-        try
-        {
-            _context.Villas.Update(entity);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error occur in Update Villa: {msg}", e.Message);
-            throw;
-        }
+        _context.Villas.Update(entity);
     }
 
     public async Task<bool> Save()
     {
-        try
-        {
-            return await _context.SaveChangesAsync() == 0;
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error occur in Save Villa: {msg}", e.Message);
-            throw;
-        }
+        return await _context.SaveChangesAsync() == 0;
     }
 }
