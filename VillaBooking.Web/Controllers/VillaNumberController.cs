@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using VillaBooking.Domain.Entities;
-using VillaBooking.Infrastructure.Data;
+using VillaBooking.Application.IRepositories;
 using VillaBooking.Web.Models.ViewModels;
 
 namespace VillaBooking.Web.Controllers;
@@ -10,20 +8,20 @@ namespace VillaBooking.Web.Controllers;
 /// <summary>
 /// Represents Villa Number Controller
 /// </summary>
-/// <param name="context">The application db context</param>
-public class VillaNumberController(AppDbContext context, ILogger<VillaNumberController> logger) : Controller
+/// <param name="unitOfWork">The unit of work interface.</param>
+public class VillaNumberController(IUnitOfWork unitOfWork, ILogger<VillaNumberController> logger) : Controller
 {
     /// <summary>
-    /// Represents the application database context.
+    /// Represents the interface of unit of work.
     /// </summary>
-    private readonly AppDbContext _context = context;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     private readonly ILogger<VillaNumberController> _logger = logger;
 
     [HttpGet]
     public IActionResult Index()
     {
-        var villaNumbers = _context.VillaNumbers.Include(u => u.Villa).ToList();
+        var villaNumbers = _unitOfWork.VillaNumber.GetAll(includeProperties: "Villa");
         return View(villaNumbers);
     }
 
@@ -32,7 +30,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     {
         var villaNumberVm = new VillaNumberVM()
         {
-            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem()
             {
                 Text = u.Name,
                 Value = u.Id.ToString(),
@@ -47,7 +45,7 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     {
         if (!ModelState.IsValid) return View();
 
-        var existingVillaNumber = await _context.VillaNumbers.FindAsync(model.VillaNumber.Villa_Number);
+        var existingVillaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == model.VillaNumber.Villa_Number);
 
         if (existingVillaNumber is not null)
         {
@@ -58,8 +56,8 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         model.VillaNumber.CreatedDateTime = DateTime.UtcNow;
         model.VillaNumber.UpdatedDateTime = DateTime.UtcNow;
 
-        _context.VillaNumbers.Add(model.VillaNumber);
-        await _context.SaveChangesAsync();
+        _unitOfWork.VillaNumber.Add(model.VillaNumber);
+        await _unitOfWork.VillaNumber.Save();
 
         TempData["success"] = $"Villa Number: {model.VillaNumber.Villa_Number} created successfully.";
         _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} created successfully.");
@@ -67,16 +65,16 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     }
 
     [HttpGet]
-    public async Task<IActionResult> Update(int villaNumberId)
+    public IActionResult Update(int villaNumberId)
     {
         var villaNumberVm = new VillaNumberVM()
         {
-            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem()
             {
                 Text = u.Name,
                 Value = u.Id.ToString(),
             }),
-            VillaNumber = await _context.VillaNumbers.FindAsync(villaNumberId),
+            VillaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == villaNumberId),
         };
 
         if (villaNumberVm.VillaNumber == null)
@@ -100,8 +98,8 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
         model.VillaNumber!.CreatedDateTime = model.VillaNumber.CreatedDateTime;
         model.VillaNumber.UpdatedDateTime = DateTime.UtcNow;
 
-        _context.VillaNumbers.Update(model.VillaNumber);
-        await _context.SaveChangesAsync();
+        _unitOfWork.VillaNumber.Update(model.VillaNumber);
+        await _unitOfWork.VillaNumber.Save();
 
         TempData["success"] = $"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.";
         _logger.LogInformation($"Villa Number: {model.VillaNumber.Villa_Number} updated successfully.");
@@ -109,16 +107,16 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     }
 
     [HttpGet]
-    public async Task<IActionResult> Delete(int villaNumberId)
+    public IActionResult Delete(int villaNumberId)
     {
         var villaNumberVm = new VillaNumberVM()
         {
-            VillaList = _context.Villas.ToList().Select(u => new SelectListItem()
+            VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem()
             {
                 Text = u.Name,
                 Value = u.Id.ToString(),
             }),
-            VillaNumber = await _context.VillaNumbers.FindAsync(villaNumberId),
+            VillaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == villaNumberId),
         };
 
         if (villaNumberVm.VillaNumber is null)
@@ -132,15 +130,15 @@ public class VillaNumberController(AppDbContext context, ILogger<VillaNumberCont
     [HttpPost]
     public async Task<IActionResult> Delete(VillaNumberVM model)
     {
-        var villaNumber = await _context.VillaNumbers.FindAsync(model.VillaNumber?.Villa_Number);
+        var villaNumber = _unitOfWork.VillaNumber.Get(u => u.Villa_Number == model.VillaNumber.Villa_Number);
 
         if (villaNumber is null)
         {
             return RedirectToAction("Error", "Home");
         }
 
-        _context.VillaNumbers.Remove(villaNumber);
-        await _context.SaveChangesAsync();
+        _unitOfWork.VillaNumber.Remove(villaNumber);
+        await _unitOfWork.VillaNumber.Save();
 
         TempData["success"] = $"Villa Number: {villaNumber.Villa_Number} deleted successfully.";
         _logger.LogInformation($"Villa Number: {villaNumber.Villa_Number} deleted successfully.");

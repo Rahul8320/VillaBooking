@@ -9,6 +9,7 @@ public class Repository<T>(AppDbContext context) : IRepository<T>
     where T : class
 {
     private readonly DbSet<T> _dbSet = context.Set<T>();
+    private static readonly char[] separator = [','];
 
     public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
     {
@@ -21,13 +22,13 @@ public class Repository<T>(AppDbContext context) : IRepository<T>
 
         if (!string.IsNullOrEmpty(includeProperties))
         {
-            query = includeProperties.Split(new char[] { ',' },
+            query = includeProperties.Split(separator,
                     StringSplitOptions.RemoveEmptyEntries)
                 .Aggregate(query, (current, includeProp)
                     => current.Include(includeProp));
         }
 
-        return query.ToList();
+        return [.. query];
     }
 
     public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
@@ -37,7 +38,7 @@ public class Repository<T>(AppDbContext context) : IRepository<T>
 
         if (!string.IsNullOrEmpty(includeProperties))
         {
-            query = includeProperties.Split(new char[] { ',' },
+            query = includeProperties.Split(separator,
                     StringSplitOptions.RemoveEmptyEntries)
                 .Aggregate(query, (current, includeProp)
                     => current.Include(includeProp));
