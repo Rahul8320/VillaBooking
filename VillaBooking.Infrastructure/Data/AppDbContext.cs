@@ -7,6 +7,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Villa> Villas { get; set; }
     public DbSet<VillaNumber> VillaNumbers { get; set; }
+    public DbSet<Amenity> Amenities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -114,5 +115,29 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 UpdatedDateTime = DateTime.UtcNow,
             }
         );
+
+        modelBuilder.Entity<Amenity>().HasData(
+            new Amenity
+            {
+                Id = 1,
+                VillaId = 1,
+                Name = "Private Pool",
+            },
+            new Amenity
+            {
+                Id= 2,
+                VillaId = 1,
+                Name = "Microwave",
+            },
+            new Amenity { Id = 3,VillaId = 1, Name = "Private Balcony" },
+            new Amenity { Id = 4, VillaId = 1, Name = "Ac & TV" },
+            new Amenity { Id = 5, VillaId = 2, Name = "Private Plunge Pool" },
+            new Amenity { Id = 6, VillaId = 2, Name = "Microwave and Mini Refrigator" },
+            new Amenity { Id = 7, VillaId = 2, Name = "Private Balcony" },
+            new Amenity { Id = 8, VillaId = 2, Name = "King bed or 2 double beds" },
+            new Amenity { Id = 9, VillaId = 3, Name = "Private Pool & Private Balcony" },
+            new Amenity { Id = 10, VillaId = 3, Name = "Jacuzzi" },
+            new Amenity { Id = 11, VillaId = 3, Name = "Microwave & Refrigator" }
+            );
     }
 }
